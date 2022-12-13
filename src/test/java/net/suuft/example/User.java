@@ -2,11 +2,11 @@ package net.suuft.example;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import net.suuft.soqul.annotation.Table;
-import net.suuft.soqul.annotation.field.DefaultValue;
-import net.suuft.soqul.annotation.field.Field;
-import net.suuft.soqul.annotation.field.NotNull;
-import net.suuft.soqul.annotation.field.PrimaryKey;
+import net.soqul.annotation.Table;
+import net.soqul.annotation.field.DefaultValue;
+import net.soqul.annotation.field.Field;
+import net.soqul.annotation.field.NotNull;
+import net.soqul.annotation.field.PrimaryKey;
 
 @AllArgsConstructor
 @NoArgsConstructor

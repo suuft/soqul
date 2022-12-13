@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-group 'net.suuft'
+group 'net.soqul'
 version '0.0.1-PREVIEW'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

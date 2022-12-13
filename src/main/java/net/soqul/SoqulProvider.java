@@ -1,8 +1,8 @@
-package net.suuft.soqul;
+package net.soqul;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.suuft.soqul.impl.SoqulImpl;
+import net.soqul.impl.SoqulImpl;
 
 @UtilityClass
 public class SoqulProvider {

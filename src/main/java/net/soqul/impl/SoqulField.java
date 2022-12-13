@@ -1,10 +1,10 @@
-package net.suuft.soqul.impl;
+package net.soqul.impl;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import net.suuft.soqul.annotation.field.Field;
+import net.soqul.annotation.field.Field;
 
 @Getter(AccessLevel.MODULE)
 @AllArgsConstructor(access = AccessLevel.MODULE)

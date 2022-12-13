@@ -1,4 +1,4 @@
-package net.suuft.soqul;
+package net.soqul;
 
 
 import lombok.NonNull;

@@ -1,6 +1,6 @@
-package net.suuft.soqul.sql;
+package net.soqul.sql;
 
-import net.suuft.soqul.log.Log;
+import net.soqul.log.Log;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

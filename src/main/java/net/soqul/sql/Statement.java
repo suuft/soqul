@@ -1,4 +1,4 @@
-package net.suuft.soqul.sql;
+package net.soqul.sql;
 
 import lombok.Getter;
 import lombok.NonNull;

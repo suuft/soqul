@@ -1,4 +1,4 @@
-package net.suuft.soqul.impl;
+package net.soqul.impl;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

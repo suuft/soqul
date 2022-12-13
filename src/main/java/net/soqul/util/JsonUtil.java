@@ -1,4 +1,4 @@
-package net.suuft.soqul.util;
+package net.soqul.util;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.nodeson.Nodeson;

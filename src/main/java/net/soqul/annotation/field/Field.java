@@ -1,4 +1,4 @@
-package net.suuft.soqul.annotation.field;
+package net.soqul.annotation.field;
 
 
 import lombok.AllArgsConstructor;

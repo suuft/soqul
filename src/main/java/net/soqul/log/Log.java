@@ -1,7 +1,7 @@
-package net.suuft.soqul.log;
+package net.soqul.log;
 
 import lombok.NonNull;
-import net.suuft.soqul.util.TimeUtil;
+import net.soqul.util.TimeUtil;
 
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;

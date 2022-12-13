@@ -1,14 +1,14 @@
-package net.suuft.soqul.impl;
+package net.soqul.impl;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import net.suuft.soqul.TRepository;
-import net.suuft.soqul.annotation.field.Field;
-import net.suuft.soqul.log.Log;
-import net.suuft.soqul.sql.Executor;
-import net.suuft.soqul.util.JsonUtil;
+import net.soqul.TRepository;
+import net.soqul.annotation.field.Field;
+import net.soqul.log.Log;
+import net.soqul.sql.Executor;
+import net.soqul.util.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;

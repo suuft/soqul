@@ -1,15 +1,15 @@
-package net.suuft.soqul.impl;
+package net.soqul.impl;
 
 import lombok.NonNull;
-import net.suuft.soqul.Soqul;
-import net.suuft.soqul.TRepository;
-import net.suuft.soqul.annotation.Table;
-import net.suuft.soqul.annotation.field.DefaultValue;
-import net.suuft.soqul.annotation.field.Field;
-import net.suuft.soqul.annotation.field.NotNull;
-import net.suuft.soqul.annotation.field.PrimaryKey;
-import net.suuft.soqul.log.Log;
-import net.suuft.soqul.sql.Executor;
+import net.soqul.Soqul;
+import net.soqul.TRepository;
+import net.soqul.annotation.Table;
+import net.soqul.annotation.field.DefaultValue;
+import net.soqul.annotation.field.Field;
+import net.soqul.annotation.field.NotNull;
+import net.soqul.annotation.field.PrimaryKey;
+import net.soqul.log.Log;
+import net.soqul.sql.Executor;
 
 import java.sql.Connection;
 import java.util.ArrayList;
