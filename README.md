@@ -11,4 +11,4 @@ If you have suggestions on what to add, what to remove, where to change - contac
 later..
 ---
 
-If you have any ideas, or you have found problems, write to me or make a pull requests.
+If you have any ideas, or you have found problems, contact to me or make a pull requests.

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SoqulImpl implements Soqul {
 
@@ -32,6 +33,14 @@ public class SoqulImpl implements Soqul {
     public void scanClass(@NonNull Class<?> clazz) {
         log.info("Try scan %s class", clazz.getName());
         Table table = clazz.getDeclaredAnnotation(Table.class);
+        AtomicBoolean hasEmptyConstructor = new AtomicBoolean(false);
+        Arrays.stream(clazz.getConstructors()).forEach(constructor -> {
+            if(constructor.getParameterCount() == 0) hasEmptyConstructor.set(true);
+        });
+        if (!hasEmptyConstructor.get()) {
+            log.warn("Failed to register class %s because it does not have empty constructor", clazz.getName());
+            return;
+        }
 
         if (table != null) {
             SoqulDto dtoClassData = new SoqulDto(table.value(), clazz, null, new ArrayList<>());

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class H2JDBCUtils {
 
     private static final String jdbcURL = "jdbc:h2:~/test";
-    private static final String jdbcUsername = "sa";
+    private static final String jdbcUsername = "root";
     private static final String jdbcPassword = "";
 
     public static Connection getConnection() {

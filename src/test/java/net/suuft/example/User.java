@@ -1,6 +1,7 @@
 package net.suuft.example;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import net.suuft.soqul.annotation.Table;
 import net.suuft.soqul.annotation.field.DefaultValue;
 import net.suuft.soqul.annotation.field.Field;
@@ -8,8 +9,11 @@ import net.suuft.soqul.annotation.field.NotNull;
 import net.suuft.soqul.annotation.field.PrimaryKey;
 
 @AllArgsConstructor
-@Table("users")
+@NoArgsConstructor
+@Table("serverusers")
 public class User {
+
+
 
     @NotNull
     @PrimaryKey
@@ -23,5 +27,5 @@ public class User {
 
     @NotNull
     @Field(name = "Role", type = Field.Type.INT)
-    private String role;
+    private int role;
 }

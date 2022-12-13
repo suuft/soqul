@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group 'net.swiftysweet'
-version '1.0-SNAPSHOT'
+group 'net.suuft'
+version '0.0.1-PREVIEW'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -29,4 +30,30 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     testImplementation 'com.h2database:h2:2.1.214'
+}
+
+publishing {
+    repositories {
+//        maven { // todo: fix
+//            name = "clojars"
+//            url = uri("https://clojars.org/repo")
+//            credentials {
+//                username = clojarsUserName
+//                password = clojarsDeployToken
+//            }
+//        }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/suuft/soqul")
+            credentials {
+                username = gitHubPersonaUsername
+                password = gitHubPersonalToken
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
 }

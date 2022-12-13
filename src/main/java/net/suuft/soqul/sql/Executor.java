@@ -1,5 +1,7 @@
 package net.suuft.soqul.sql;
 
+import net.suuft.soqul.log.Log;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +9,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Executor {
+
+    private static final Log log = new Log("SqlManager");
 
     private final Connection connection;
 
@@ -26,6 +30,7 @@ public class Executor {
      * @param elements - то что нужно заменить
      */
     public void execute(boolean async, String sql, Object... elements) {
+        log.info("NEW REQUEST: " + sql);
 
         Runnable command = () -> {
             try {
@@ -52,19 +57,20 @@ public class Executor {
      *
      * @param async - асинхронно ли?
      * @param sql - sql запрос
-     * @param elements - то что нужно заменить
      * @param handler
      */
-    public <T> T executeQuery(boolean async, String sql, ResponseHandler<T, ResultSet, SQLException> handler, Object... elements) {
+    public <T> T executeQuery(boolean async, String sql, ResponseHandler<T, ResultSet, SQLException> handler) {
+        log.info("NEW REQUEST: " + sql);
+
         AtomicReference<T> result = new AtomicReference<>();
 
         Runnable command = () -> {
             try {
                 if (connection.isClosed()) return;
-                Statement statement = new Statement(connection, sql, elements);
+                Statement statement = new Statement(connection, sql);
                 result.set(handler.handleResponse(statement.getResultSet()));
                 statement.close();
-            } catch (SQLException e) {
+            } catch (SQLException | NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         };
@@ -78,4 +84,5 @@ public class Executor {
 
         return result.get();
     }
+
 }

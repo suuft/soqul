@@ -10,7 +10,7 @@ public interface TRepository<T> {
 
     void save(@NonNull T t);
 
-    T getByPrimaryKey(@NonNull Object object);
+    T getByPrimary(@NonNull Object object);
 
     Collection<T> getAll();
 
