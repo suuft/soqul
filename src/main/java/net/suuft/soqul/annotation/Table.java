@@ -1,4 +1,4 @@
-package net.swiftysweet.soqul.annotation;
+package net.suuft.soqul.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

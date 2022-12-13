@@ -1,4 +1,4 @@
-package net.swiftysweet.soqul.annotation.field;
+package net.suuft.soqul.annotation.field;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface PrimaryKey {
+public @interface NotNull {
 }

@@ -1,4 +1,4 @@
-package net.swiftysweet.soqul.util;
+package net.suuft.soqul.util;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.nodeson.Nodeson;

@@ -1,4 +1,4 @@
-package net.swiftysweet.soqul.sql;
+package net.suuft.soqul.sql;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -8,8 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 @Getter
-public class SqlStatement implements Closeable {
+public class Statement implements Closeable {
 
     private final PreparedStatement preparedStatement;
     private ResultSet resultSet;
@@ -18,9 +19,9 @@ public class SqlStatement implements Closeable {
     /**
      * Инициализация статемента
      */
-    public SqlStatement(@NonNull Connection connection,
-                        @NonNull String sqlQuery,
-                        @NonNull Object... queryElements) throws SQLException {
+    public Statement(@NonNull Connection connection,
+                     @NonNull String sqlQuery,
+                     @NonNull Object... queryElements) throws SQLException {
 
         this.preparedStatement = connection.prepareStatement(sqlQuery);
 

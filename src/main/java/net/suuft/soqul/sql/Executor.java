@@ -1,34 +1,36 @@
-package net.swiftysweet.soqul.sql;
+package net.suuft.soqul.sql;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SqlExecutor {
+public class Executor {
 
-    private final SqlConnection connection;
+    private final Connection connection;
 
-    private SqlExecutor(final SqlConnection connection) {
+    private Executor(final Connection connection) {
         this.connection = connection;
     }
 
-    public static SqlExecutor getExecutor(SqlConnection connection) {
-        return new SqlExecutor(connection);
+    public static Executor getExecutor(Connection connection) {
+        return new Executor(connection);
     }
 
     /**
      * Выполнение обычного SQL-запроса.
      *
-     * @param async - асинхронно ли?
-     * @param sql - sql запрос
+     * @param async    - асинхронно ли?
+     * @param sql      - sql запрос
      * @param elements - то что нужно заменить
      */
     public void execute(boolean async, String sql, Object... elements) {
+
         Runnable command = () -> {
-            connection.refreshConnection();
             try {
-                SqlStatement statement = new SqlStatement(connection.getConnection(), sql, elements);
+                if (connection.isClosed()) return;
+                Statement statement = new Statement(connection, sql, elements);
 
                 statement.execute();
                 statement.close();
@@ -38,7 +40,7 @@ public class SqlExecutor {
         };
 
         if (async) {
-            Executors.newCachedThreadPool().submit(command);
+            CompletableFuture.runAsync(command);
             return;
         }
 
@@ -57,9 +59,9 @@ public class SqlExecutor {
         AtomicReference<T> result = new AtomicReference<>();
 
         Runnable command = () -> {
-            connection.refreshConnection();
             try {
-                SqlStatement statement = new SqlStatement(connection.getConnection(), sql, elements);
+                if (connection.isClosed()) return;
+                Statement statement = new Statement(connection, sql, elements);
 
                 result.set(handler.handleResponse(statement.getResultSet()));
                 statement.close();
@@ -69,7 +71,7 @@ public class SqlExecutor {
         };
 
         if (async) {
-            Executors.newCachedThreadPool().submit(command);
+            CompletableFuture.runAsync(command);
             return null;
         }
 

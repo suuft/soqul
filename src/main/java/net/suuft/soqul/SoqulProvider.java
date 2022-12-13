@@ -1,16 +1,15 @@
-package net.swiftysweet.soqul;
+package net.suuft.soqul;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.swiftysweet.soqul.impl.SoqulImpl;
+import net.suuft.soqul.impl.SoqulImpl;
 
 @UtilityClass
 public class SoqulProvider {
-    private Soqul instance; {
-        register(new SoqulImpl());
-    }
+    private static Soqul instance;
 
     public Soqul get() {
+        if (instance == null) register(new SoqulImpl());
         return instance;
     }
 

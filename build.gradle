@@ -4,6 +4,9 @@ plugins {
 
 group 'net.swiftysweet'
 version '1.0-SNAPSHOT'
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 
 repositories {
     mavenCentral()
@@ -19,10 +22,11 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'sql', name: 'sql-connector-java', version: '8.0.30'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
     implementation 'com.github.itzstonlex:nodeson:1.0'
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testImplementation 'com.h2database:h2:2.1.214'
 }

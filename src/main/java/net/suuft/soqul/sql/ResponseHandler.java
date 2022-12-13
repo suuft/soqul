@@ -1,4 +1,4 @@
-package net.swiftysweet.soqul.sql;
+package net.suuft.soqul.sql;
 
 public interface ResponseHandler<R, O, T extends Throwable> {
 
