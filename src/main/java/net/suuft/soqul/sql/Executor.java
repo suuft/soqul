@@ -62,7 +62,6 @@ public class Executor {
             try {
                 if (connection.isClosed()) return;
                 Statement statement = new Statement(connection, sql, elements);
-
                 result.set(handler.handleResponse(statement.getResultSet()));
                 statement.close();
             } catch (SQLException e) {
