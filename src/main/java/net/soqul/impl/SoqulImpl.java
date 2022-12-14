@@ -8,6 +8,8 @@ import net.soqul.annotation.field.DefaultValue;
 import net.soqul.annotation.field.Field;
 import net.soqul.annotation.field.NotNull;
 import net.soqul.annotation.field.PrimaryKey;
+import net.soqul.cache.CachedObject;
+import net.soqul.cache.ResponseCache;
 import net.soqul.log.Log;
 import net.soqul.sql.Executor;
 
@@ -66,7 +68,7 @@ public class SoqulImpl implements Soqul {
     }
 
     @Override
-    public <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull Connection connection) {
+    public <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull Connection connection, ResponseCache<T> cache) {
         if (!scannedClasses.containsKey(clazz.getName())) {
             log.warn("Class %s is not scanned, scan now..", clazz.getName());
             scanClass(clazz);
@@ -79,6 +81,6 @@ public class SoqulImpl implements Soqul {
         } catch (Exception exception) {
             log.warn("The table could not be created.");
         }
-        return new TRepositoryImpl<>(Executor.getExecutor(connection), scannedClasses.get(clazz.getName()));
+        return new TRepositoryImpl<>(Executor.getExecutor(connection), cache, scannedClasses.get(clazz.getName()));
     }
 }

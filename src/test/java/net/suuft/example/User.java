@@ -1,31 +1,28 @@
 package net.suuft.example;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.soqul.annotation.Table;
-import net.soqul.annotation.field.DefaultValue;
-import net.soqul.annotation.field.Field;
-import net.soqul.annotation.field.NotNull;
-import net.soqul.annotation.field.PrimaryKey;
+import net.soqul.annotation.field.*;
 
-@AllArgsConstructor
+import static net.soqul.annotation.field.Field.Type.*;
+
+@Setter
 @NoArgsConstructor
-@Table("serverusers")
+@AllArgsConstructor
+@Table("web_users")
 public class User {
-
-
 
     @NotNull
     @PrimaryKey
-    @Field(name = "Id", type = Field.Type.INT)
-    private long identifier;
+    @Field(name = "Login", type = VARCHAR)
+    private String login;
 
-    @NotNull
-    @DefaultValue("James Brown")
-    @Field(name = "Full_Name", type = Field.Type.VARCHAR)
+    @DefaultValue("magic")
+    @Field(name = "Full_Name", type = VARCHAR)
     private String fullName;
 
-    @NotNull
-    @Field(name = "Role", type = Field.Type.INT)
-    private int role;
+    @DefaultValue("0")
+    @Field(name = "Age", type = INT)
+    private int age;
+
 }
