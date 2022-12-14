@@ -8,6 +8,50 @@ If you have suggestions on what to add, what to remove, where to change - contac
 * Refactor code
 * Add more functions (caching, other..)
 
+### `Add as depend:`
+
+| **Gradle:**
+
+```groovy
+repositories {
+    // other repositories
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/suuft/soqul")
+        credentials {
+            username = gitHubPersonaUsername // you github username
+            password = gitHubPersonalToken // you token from https://github.com/settings/tokens
+        }
+    }
+}
+
+dependencies {
+    implementation 'net.soqul:soqul:0.0.1-PREVIEW'
+}
+```
+
+| **Maven:**
+Repository:
+
+```xml
+<repository>
+    <id>github</id>
+    <name>GitHub Packages</name>
+    <url>https://maven.pkg.github.com/suuft/soqul</url>
+</repository>
+```
+
+Depend:
+
+```xml
+
+<dependency>
+    <groupId>net.soqul</groupId>
+    <artifactId>soqul</artifactId>
+    <version>0.0.1-PREVIEW</version>
+</dependency>
+```
+
 ---
 
 ### `Usage examples:`
@@ -136,7 +180,7 @@ import net.suuft.example.util.MySqlUtil;
 public class UserManager {
 
     public static final UserManager INSTANCE = new UserManager();
-    private TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, MySqlUtil
+    private final TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, MySqlUtil
             .createConnection("localhost", 3306, "root", "root", "test", false));
 
 
@@ -155,7 +199,7 @@ import net.suuft.example.util.MySqlUtil;
 public class UserManager {
 
     public static final UserManager INSTANCE = new UserManager();
-    private TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, MySqlUtil
+    private final TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, MySqlUtil
             .createConnection("localhost", 3306, "root", "root", "test", false));
 
     public User getUser(String login) {
