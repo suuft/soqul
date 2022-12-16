@@ -13,8 +13,6 @@ import net.soqul.util.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 
 @Getter(AccessLevel.MODULE)
@@ -33,6 +31,8 @@ public class TRepositoryImpl<T> implements TRepository<T> {
         StringBuilder builderNames = new StringBuilder();
         StringBuilder builderValues = new StringBuilder();
         StringBuilder builderValuesAndNames = new StringBuilder();
+        Field primaryField = dto.getKeyField().getField();
+
         int i = 0;
         if (dto == null) {
             log.warn("dto is null!");
@@ -61,7 +61,24 @@ public class TRepositoryImpl<T> implements TRepository<T> {
 
         String request = String.format("INSERT INTO `%s` (%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s", dto.getTable(), builderNames, builderValues, builderValuesAndNames);
         executor.execute(false, request);
-        if (cache != null) cache.upCache(request, t);
+
+        if (cache != null) {
+            try {
+                java.lang.reflect.Field field1 = t.getClass().getDeclaredField(dto.getKeyField().getName());
+                field1.setAccessible(true);
+                Object fieldValue = field1.get(t);
+                if (fieldValue != null)
+                    cache.upCache("SELECT * FROM `" + dto.getTable() +
+                            "` WHERE `" + primaryField.name() + "` = '" +
+                            (primaryField.type() == Field.Type.JSON ? JsonUtil.to(fieldValue) :
+                                    fieldValue + "' LIMIT 1"), t);
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                log.warn("Cant get field value!");
+
+            }
+        }
 
     }
 

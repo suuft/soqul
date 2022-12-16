@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.soqul:soqul:0.0.1-PREVIEW'
+    implementation 'net.soqul:soqul:0.0.2-PREVIEW'
 }
 ```
 
@@ -48,7 +48,7 @@ Depend:
 <dependency>
     <groupId>net.soqul</groupId>
     <artifactId>soqul</artifactId>
-    <version>0.0.1-PREVIEW</version>
+    <version>0.0.2-PREVIEW</version>
 </dependency>
 ```
 
