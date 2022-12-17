@@ -3,12 +3,11 @@ package net.soqul.impl;
 import lombok.NonNull;
 import net.soqul.Soqul;
 import net.soqul.TRepository;
-import net.soqul.annotation.Table;
-import net.soqul.annotation.field.DefaultValue;
-import net.soqul.annotation.field.Field;
-import net.soqul.annotation.field.NotNull;
-import net.soqul.annotation.field.PrimaryKey;
-import net.soqul.cache.CachedObject;
+import net.soqul.annotation.InitateEntity;
+import net.soqul.annotation.field.InitateColumn;
+import net.soqul.annotation.field.MakeNotNull;
+import net.soqul.annotation.field.RetentionDefault;
+import net.soqul.annotation.field.RetentionPrimary;
 import net.soqul.cache.ResponseCache;
 import net.soqul.log.Log;
 import net.soqul.sql.Executor;
@@ -34,26 +33,26 @@ public class SoqulImpl implements Soqul {
     @Override
     public void scanClass(@NonNull Class<?> clazz) {
         log.info("Try scan %s class", clazz.getName());
-        Table table = clazz.getDeclaredAnnotation(Table.class);
+        InitateEntity initateEntity = clazz.getDeclaredAnnotation(InitateEntity.class);
         AtomicBoolean hasEmptyConstructor = new AtomicBoolean(false);
         Arrays.stream(clazz.getConstructors()).forEach(constructor -> {
-            if(constructor.getParameterCount() == 0) hasEmptyConstructor.set(true);
+            if (constructor.getParameterCount() == 0) hasEmptyConstructor.set(true);
         });
         if (!hasEmptyConstructor.get()) {
             log.warn("Failed to register class %s because it does not have empty constructor", clazz.getName());
             return;
         }
 
-        if (table != null) {
-            SoqulDto dtoClassData = new SoqulDto(table.value(), clazz, null, new ArrayList<>());
+        if (initateEntity != null) {
+            SoqulDto dtoClassData = new SoqulDto(clazz, null, new ArrayList<>());
             Arrays.stream(clazz.getDeclaredFields()).forEach(f -> {
-                Field annotation = f.getAnnotation(Field.class);
+                InitateColumn annotation = f.getAnnotation(InitateColumn.class);
                 if (annotation != null) {
-                    DefaultValue defaultValue = f.getAnnotation(DefaultValue.class);
+                    RetentionDefault retentionDefault = f.getAnnotation(RetentionDefault.class);
                     dtoClassData.registerField(new SoqulField(
-                            f.getAnnotation(NotNull.class) != null,
-                            f.getAnnotation(PrimaryKey.class) != null,
-                            defaultValue != null ? defaultValue.value() : null,
+                            f.getAnnotation(MakeNotNull.class) != null,
+                            f.getAnnotation(RetentionPrimary.class) != null,
+                            retentionDefault != null ? retentionDefault.value() : null,
                             f.getName(),
                             annotation));
                 }
@@ -68,14 +67,14 @@ public class SoqulImpl implements Soqul {
     }
 
     @Override
-    public <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull Connection connection, ResponseCache<T> cache) {
+    public <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull String tableName, @NonNull Connection connection, ResponseCache<T> cache) {
         if (!scannedClasses.containsKey(clazz.getName())) {
             log.warn("Class %s is not scanned, scan now..", clazz.getName());
             scanClass(clazz);
         }
         log.info("try create table..");
         try {
-            String sql = scannedClasses.get(clazz.getName()).getCreateQuery();
+            String sql = scannedClasses.get(clazz.getName()).getCreateQuery(tableName);
             log.info(" SQL: %s", sql);
             connection.createStatement().execute(sql);
         } catch (Exception exception) {

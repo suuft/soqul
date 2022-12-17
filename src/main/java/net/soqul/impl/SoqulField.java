@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import net.soqul.annotation.field.Field;
+import net.soqul.annotation.field.InitateColumn;
 
 @Getter(AccessLevel.MODULE)
 @AllArgsConstructor(access = AccessLevel.MODULE)
@@ -15,12 +15,12 @@ public class SoqulField {
     boolean primaryKey;
     String defaultValue;
     String name;
-    Field field;
+    InitateColumn initateColumn;
 
 
     @Override
     public String toString() {
-        return "`" + field.name() + "` " + field.type().withMaxLength(field.lenght())
+        return "`" + initateColumn.name() + "` " + initateColumn.type().withMaxLength(initateColumn.lenght())
                 + (notNull ? " NOT NULL" : "") + (primaryKey ? " PRIMARY KEY" : "") +
                 (defaultValue != null ? " DEFAULT '" + defaultValue + "'" : "");
     }

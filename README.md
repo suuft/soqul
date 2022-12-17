@@ -68,11 +68,12 @@ public class User {
 ```
 
 Now, above the class, you need to specify the annotation @Table("NAME_YOUR_SQL_TABLE_YOU_WANT"), thanks to this
-annotation, ORM will find your class and register a table ("NAME_YOUR_SQL_TABLE_YOU_WANT") for it. I'll select the table
+annotation, ORM will find your class and register a initateEntity ("NAME_YOUR_SQL_TABLE_YOU_WANT") for it. I'll select
+the initateEntity
 name "web_users"::
 
 ```java
-import net.soqul.annotation.Table;
+import net.soqul.annotation.InitateEntity;
 
 @Table("web_users")
 public class User {
@@ -97,10 +98,10 @@ As a result, we get something like:
 
 ```java
 import lombok.*;
-import net.soqul.annotation.Table;
+import net.soqul.annotation.InitateEntity;
 import net.soqul.annotation.field.*;
 
-import static net.soqul.annotation.field.Field.Type.*;
+import static net.soqul.annotation.field.InitateColumn.Type.*;
 
 @Setter // not compulsory
 @NoArgsConstructor // There must be an empty constructor

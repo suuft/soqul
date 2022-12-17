@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import net.soqul.TRepository;
-import net.soqul.annotation.field.Field;
+import net.soqul.annotation.field.InitateColumn;
 import net.soqul.cache.ResponseCache;
 import net.soqul.log.Log;
 import net.soqul.sql.Executor;
@@ -31,7 +31,7 @@ public class TRepositoryImpl<T> implements TRepository<T> {
         StringBuilder builderNames = new StringBuilder();
         StringBuilder builderValues = new StringBuilder();
         StringBuilder builderValuesAndNames = new StringBuilder();
-        Field primaryField = dto.getKeyField().getField();
+        InitateColumn primaryInitateColumn = dto.getKeyField().getInitateColumn();
 
         int i = 0;
         if (dto == null) {
@@ -47,15 +47,15 @@ public class TRepositoryImpl<T> implements TRepository<T> {
                 field1.setAccessible(true);
                 Object fieldValue = field1.get(t);
                 if (fieldValue != null)
-                    value = field.getField().type() == Field.Type.JSON ? JsonUtil.to(fieldValue) : fieldValue;
+                    value = field.getInitateColumn().type() == InitateColumn.Type.JSON ? JsonUtil.to(fieldValue) : fieldValue;
             } catch (Exception exception) {
                 exception.printStackTrace();
                 log.warn("Cant get field value!");
             }
-            builderNames.append("`" + field.getField().name() + "`" + end);
+            builderNames.append("`" + field.getInitateColumn().name() + "`" + end);
             builderValues.append("'" + value + "'" + end);
             if (!field.isPrimaryKey())
-                builderValuesAndNames.append("`" + field.getField().name() + "` = '" + value + "'" + end);
+                builderValuesAndNames.append("`" + field.getInitateColumn().name() + "` = '" + value + "'" + end);
         }
 
 
@@ -69,8 +69,8 @@ public class TRepositoryImpl<T> implements TRepository<T> {
                 Object fieldValue = field1.get(t);
                 if (fieldValue != null)
                     cache.upCache("SELECT * FROM `" + dto.getTable() +
-                            "` WHERE `" + primaryField.name() + "` = '" +
-                            (primaryField.type() == Field.Type.JSON ? JsonUtil.to(fieldValue) :
+                            "` WHERE `" + primaryInitateColumn.name() + "` = '" +
+                            (primaryInitateColumn.type() == InitateColumn.Type.JSON ? JsonUtil.to(fieldValue) :
                                     fieldValue + "' LIMIT 1"), t);
 
             } catch (Exception exception) {
@@ -84,8 +84,8 @@ public class TRepositoryImpl<T> implements TRepository<T> {
 
     @Override
     public T getByPrimary(@NonNull Object object) {
-        Field primaryField = dto.getKeyField().getField();
-        String request = String.format("SELECT * FROM `" + dto.getTable() + "` WHERE `" + primaryField.name() + "` = '" + (primaryField.type() == Field.Type.JSON ? JsonUtil.to(object) : object.toString()) + "' LIMIT 1");
+        InitateColumn primaryInitateColumn = dto.getKeyField().getInitateColumn();
+        String request = String.format("SELECT * FROM `" + dto.getTable() + "` WHERE `" + primaryInitateColumn.name() + "` = '" + (primaryInitateColumn.type() == InitateColumn.Type.JSON ? JsonUtil.to(object) : object.toString()) + "' LIMIT 1");
 
         return cache != null ? cache.putIfAbsent(request, executor, e -> requestByQuery(object, request))
                 : requestByQuery(object, request);
@@ -93,15 +93,15 @@ public class TRepositoryImpl<T> implements TRepository<T> {
 
     public T requestByQuery(@NonNull Object object, String request) {
         try {
-            Field primaryField = dto.getKeyField().getField();
+            InitateColumn primaryInitateColumn = dto.getKeyField().getInitateColumn();
             T t = (T) dto.getClazz().newInstance();
             executor.executeQuery(false, request, rs -> {
                 if (!rs.next()) return null;
                 for (SoqulField field : dto.getFields()) {
                     java.lang.reflect.Field field1 = t.getClass().getDeclaredField(field.getName());
                     field1.setAccessible(true);
-                    Object value = rs.getObject(field.getField().name());
-                    field1.set(t, field.getField().type() == Field.Type.JSON ? JsonUtil.from(value.toString(), field1.getClass()) : value);
+                    Object value = rs.getObject(field.getInitateColumn().name());
+                    field1.set(t, field.getInitateColumn().type() == InitateColumn.Type.JSON ? JsonUtil.from(value.toString(), field1.getClass()) : value);
                 }
                 return null;
             });
