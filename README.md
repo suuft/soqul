@@ -16,17 +16,13 @@ If you have suggestions on what to add, what to remove, where to change - contac
 repositories {
     // other repositories
     maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/suuft/soqul")
-        credentials {
-            username = gitHubPersonaUsername // you github username
-            password = gitHubPersonalToken // you token from https://github.com/settings/tokens
-        }
+        name = "clojars.org"
+        url = uri("https://repo.clojars.org")
     }
 }
 
 dependencies {
-    implementation 'net.soqul:soqul:0.0.2-PREVIEW'
+    implementation 'net.clojars.suuft:soqul:1.0.1'
 }
 ```
 
@@ -35,9 +31,8 @@ Repository:
 
 ```xml
 <repository>
-    <id>github</id>
-    <name>GitHub Packages</name>
-    <url>https://maven.pkg.github.com/suuft/soqul</url>
+    <id>clojars.org</id>
+    <url>https://repo.clojars.org</url>
 </repository>
 ```
 
@@ -46,9 +41,9 @@ Depend:
 ```xml
 
 <dependency>
-    <groupId>net.soqul</groupId>
+    <groupId>net.clojars.suuft</groupId>
     <artifactId>soqul</artifactId>
-    <version>0.0.2-PREVIEW</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -67,15 +62,14 @@ public class User {
 }
 ```
 
-Now, above the class, you need to specify the annotation @Table("NAME_YOUR_SQL_TABLE_YOU_WANT"), thanks to this
-annotation, ORM will find your class and register a initateEntity ("NAME_YOUR_SQL_TABLE_YOU_WANT") for it. I'll select
-the initateEntity
+Now, above the class, you need to specify the annotation @InitateEntity, thanks to this
+annotation, ORM will find your class and register:
 name "web_users"::
 
 ```java
 import net.soqul.annotation.InitateEntity;
 
-@Table("web_users")
+@InitateEntity
 public class User {
 
     private String login;
@@ -106,20 +100,20 @@ import static net.soqul.annotation.field.InitateColumn.Type.*;
 @Setter // not compulsory
 @NoArgsConstructor // There must be an empty constructor
 @AllArgsConstructor // not compulsory
-@Table("web_users")
+@InitateEntity
 public class User {
 
-    @NotNull
-    @PrimaryKey
-    @Field(name = "Login", type = VARCHAR)
+    @RetentionFilled
+    @RetentionPrimary
+    @InitateColumn(name = "Login")
     private String login;
 
-    @DefaultValue("Imaginary Man")
-    @Field(name = "Full_Name", type = VARCHAR)
+    @RetentionDefault("Imaginary Man")
+    @InitateColumn(name = "Full_Name")
     private String fullName;
 
-    @DefaultValue("0")
-    @Field(name = "Age", type = INT)
+    @RetentionDefault("0")
+    @InitateColumn(name = "Age")
     private int age;
 
 }
@@ -181,7 +175,7 @@ import net.suuft.example.util.MySqlUtil;
 public class UserManager {
 
     public static final UserManager INSTANCE = new UserManager();
-    private final TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, MySqlUtil
+    private final TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, "Users", MySqlUtil
             .createConnection("localhost", 3306, "root", "root", "test", false));
 
 

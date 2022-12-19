@@ -5,6 +5,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Field;
+import java.util.Date;
+import java.util.Set;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -41,11 +43,16 @@ public enum ColumnType {
     public static ColumnType getFromField(@NonNull Field field) {
         Class<?> clazz = field.getType();
         if (clazz.isPrimitive()) {
-            //boolean,char,byte,short,int,long,double,float
-            if (clazz.isAssignableFrom(Number.class)) {
-                return clazz.isAssignableFrom(float.class) ? FLOAT : clazz.isAssignableFrom(double.class) ? DOUBLE : INT;
-            }
+
+            if (clazz.equals(char.class)) return CHAR;
+            else if (clazz.equals(boolean.class)) return BOOL;
+            return clazz.equals(float.class) ? FLOAT : clazz.equals(double.class) ? DOUBLE : INT;
         }
+        if (clazz.equals(String.class)) return VARCHAR;
+        else if (clazz.equals(Set.class) || clazz.isAssignableFrom(Set.class)) return SET;
+        else if (clazz.equals(Enum.class)) return ENUM;
+        else if (clazz.equals(Date.class)) return DATE;
+
         return JSON;
     }
 

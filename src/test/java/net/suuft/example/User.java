@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.soqul.annotation.InitateEntity;
 import net.soqul.annotation.field.InitateColumn;
-import net.soqul.annotation.field.MakeNotNull;
 import net.soqul.annotation.field.RetentionDefault;
+import net.soqul.annotation.field.RetentionFilled;
 import net.soqul.annotation.field.RetentionPrimary;
 
 @Setter
@@ -15,7 +15,7 @@ import net.soqul.annotation.field.RetentionPrimary;
 @InitateEntity
 public class User {
 
-    @MakeNotNull
+    @RetentionFilled
     @RetentionPrimary
     @InitateColumn(name = "Login")
     private String login;

@@ -3,29 +3,21 @@ plugins {
     id 'maven-publish'
 }
 
-group 'net.soqul'
-version '0.0.2-PREVIEW'
+group 'net.clojars.suuft'
+version '1.0.1'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ItzStonlex/Nodeson")
-            credentials {
-                username = gitHubPersonaUsername
-                password = gitHubPersonalToken
-            }
-    }
 }
 
 dependencies {
-    implementation 'com.github.itzstonlex:nodeson:1.0'
+    implementation 'com.google.code.gson:gson:2.8.7'
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.reflections:reflections:0.10.2'
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     testImplementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
@@ -33,22 +25,15 @@ dependencies {
 
 publishing {
     repositories {
-//        maven { // todo: fix
-//            name = "clojars"
-//            url = uri("https://clojars.org/repo")
-//            credentials {
-//                username = clojarsUserName
-//                password = clojarsDeployToken
-//            }
-//        }
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/suuft/soqul")
+            name = "clojars"
+            url = uri("https://clojars.org/repo")
             credentials {
-                username = gitHubPersonaUsername
-                password = gitHubPersonalToken
+                username = clojarsUserName
+                password = clojarsDeployToken
             }
         }
+
     }
     publications {
         gpr(MavenPublication) {

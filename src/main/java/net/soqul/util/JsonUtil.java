@@ -1,19 +1,19 @@
 package net.soqul.util;
+
+import com.google.gson.Gson;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import net.nodeson.Nodeson;
-import net.nodeson.NodesonParser;
 
 @UtilityClass
 public class JsonUtil {
 
-    private final NodesonParser parser = Nodeson.parallel();
+    private final Gson parser = new Gson();
 
     public String to(@NonNull Object object) {
-        return parser.parseTo(object);
+        return parser.toJson(object);
     }
 
     public <T> T from(@NonNull String s, Class<T> tClass) {
-        return parser.parseFrom(s, tClass);
+        return parser.fromJson(s, tClass);
     }
 }
