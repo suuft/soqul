@@ -3,15 +3,18 @@ package net.soqul.impl;
 import lombok.NonNull;
 import net.soqul.Soqul;
 import net.soqul.TRepository;
-import net.soqul.annotation.Table;
-import net.soqul.annotation.field.DefaultValue;
-import net.soqul.annotation.field.Field;
-import net.soqul.annotation.field.NotNull;
-import net.soqul.annotation.field.PrimaryKey;
-import net.soqul.cache.CachedObject;
+import net.soqul.annotation.InitateEntity;
+import net.soqul.annotation.field.InitateColumn;
+import net.soqul.annotation.field.RetentionDefault;
+import net.soqul.annotation.field.RetentionFilled;
+import net.soqul.annotation.field.RetentionPrimary;
 import net.soqul.cache.ResponseCache;
 import net.soqul.log.Log;
+import net.soqul.sql.ColumnType;
 import net.soqul.sql.Executor;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -28,32 +31,38 @@ public class SoqulImpl implements Soqul {
     @Override
     public void scanPackage(@NonNull String packageName) {
         log.info("Try scan %s package", packageName);
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .forPackage(packageName)
+                .setScanners(Scanners.Resources, Scanners.TypesAnnotated));
 
+        reflections.getTypesAnnotatedWith(InitateEntity.class).forEach(this::scanClass);
+        log.info("Success scanned %s package", packageName);
     }
 
     @Override
     public void scanClass(@NonNull Class<?> clazz) {
         log.info("Try scan %s class", clazz.getName());
-        Table table = clazz.getDeclaredAnnotation(Table.class);
+        InitateEntity initateEntity = clazz.getDeclaredAnnotation(InitateEntity.class);
         AtomicBoolean hasEmptyConstructor = new AtomicBoolean(false);
         Arrays.stream(clazz.getConstructors()).forEach(constructor -> {
-            if(constructor.getParameterCount() == 0) hasEmptyConstructor.set(true);
+            if (constructor.getParameterCount() == 0) hasEmptyConstructor.set(true);
         });
         if (!hasEmptyConstructor.get()) {
             log.warn("Failed to register class %s because it does not have empty constructor", clazz.getName());
             return;
         }
 
-        if (table != null) {
-            SoqulDto dtoClassData = new SoqulDto(table.value(), clazz, null, new ArrayList<>());
+        if (initateEntity != null) {
+            SoqulDto dtoClassData = new SoqulDto(clazz, null, new ArrayList<>());
             Arrays.stream(clazz.getDeclaredFields()).forEach(f -> {
-                Field annotation = f.getAnnotation(Field.class);
+                InitateColumn annotation = f.getAnnotation(InitateColumn.class);
                 if (annotation != null) {
-                    DefaultValue defaultValue = f.getAnnotation(DefaultValue.class);
+                    RetentionDefault retentionDefault = f.getAnnotation(RetentionDefault.class);
                     dtoClassData.registerField(new SoqulField(
-                            f.getAnnotation(NotNull.class) != null,
-                            f.getAnnotation(PrimaryKey.class) != null,
-                            defaultValue != null ? defaultValue.value() : null,
+                            ColumnType.getFromField(f),
+                            f.getAnnotation(RetentionFilled.class) != null,
+                            f.getAnnotation(RetentionPrimary.class) != null,
+                            retentionDefault != null ? retentionDefault.value() : null,
                             f.getName(),
                             annotation));
                 }
@@ -68,19 +77,19 @@ public class SoqulImpl implements Soqul {
     }
 
     @Override
-    public <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull Connection connection, ResponseCache<T> cache) {
+    public <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull String tableName, @NonNull Connection connection, ResponseCache<T> cache) {
         if (!scannedClasses.containsKey(clazz.getName())) {
             log.warn("Class %s is not scanned, scan now..", clazz.getName());
             scanClass(clazz);
         }
         log.info("try create table..");
         try {
-            String sql = scannedClasses.get(clazz.getName()).getCreateQuery();
+            String sql = scannedClasses.get(clazz.getName()).getCreateQuery(tableName);
             log.info(" SQL: %s", sql);
             connection.createStatement().execute(sql);
         } catch (Exception exception) {
             log.warn("The table could not be created.");
         }
-        return new TRepositoryImpl<>(Executor.getExecutor(connection), cache, scannedClasses.get(clazz.getName()));
+        return new TRepositoryImpl<>(tableName, Executor.getExecutor(connection), cache, scannedClasses.get(clazz.getName()));
     }
 }

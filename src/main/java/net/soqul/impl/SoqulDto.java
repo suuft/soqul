@@ -12,7 +12,6 @@ import java.util.List;
 public class SoqulDto {
 
 
-    String table;
     Class<?> clazz;
     SoqulField keyField;
     List<SoqulField> fields;
@@ -22,7 +21,7 @@ public class SoqulDto {
         fields.add(field);
     }
 
-    public String getCreateQuery() {
+    public String getCreateQuery(@NonNull String table) {
         StringBuilder builder = new StringBuilder();
         int i = 0;
         for (SoqulField field : fields) {

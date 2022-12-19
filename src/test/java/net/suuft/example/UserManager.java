@@ -9,7 +9,7 @@ import net.suuft.example.util.MySqlUtil;
 public class UserManager {
 
     public static final UserManager INSTANCE = new UserManager();
-    private TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, MySqlUtil
+    private final TRepository<User> userRepository = SoqulProvider.get().createRepository(User.class, "Users", MySqlUtil
             .createConnection("localhost", 3306, "root", "root", "test", false));
 
     public User getUser(String login) {

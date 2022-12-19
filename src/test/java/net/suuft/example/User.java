@@ -1,28 +1,31 @@
 package net.suuft.example;
 
-import lombok.*;
-import net.soqul.annotation.Table;
-import net.soqul.annotation.field.*;
-
-import static net.soqul.annotation.field.Field.Type.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import net.soqul.annotation.InitateEntity;
+import net.soqul.annotation.field.InitateColumn;
+import net.soqul.annotation.field.RetentionDefault;
+import net.soqul.annotation.field.RetentionFilled;
+import net.soqul.annotation.field.RetentionPrimary;
 
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("web_users")
+@InitateEntity
 public class User {
 
-    @NotNull
-    @PrimaryKey
-    @Field(name = "Login", type = VARCHAR)
+    @RetentionFilled
+    @RetentionPrimary
+    @InitateColumn(name = "Login")
     private String login;
 
-    @DefaultValue("magic")
-    @Field(name = "Full_Name", type = VARCHAR)
+    @RetentionDefault("magic")
+    @InitateColumn(name = "Full_Name")
     private String fullName;
 
-    @DefaultValue("0")
-    @Field(name = "Age", type = INT)
+    @RetentionDefault("0")
+    @InitateColumn(name = "Age")
     private int age;
 
 }

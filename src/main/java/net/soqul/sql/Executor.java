@@ -72,6 +72,8 @@ public class Executor {
                 statement.close();
             } catch (SQLException | NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
             }
         };
 
