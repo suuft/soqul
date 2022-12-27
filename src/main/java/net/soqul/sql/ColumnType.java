@@ -49,7 +49,7 @@ public enum ColumnType {
             return clazz.equals(float.class) ? FLOAT : clazz.equals(double.class) ? DOUBLE : INT;
         }
         if (clazz.equals(String.class)) return VARCHAR;
-        else if (clazz.equals(Set.class) || clazz.isAssignableFrom(Set.class)) return SET;
+        else if (clazz.equals(Set.class) || clazz.isAssignableFrom(Set.class)) return JSON;
         else if (clazz.equals(Enum.class)) return ENUM;
         else if (clazz.equals(Date.class)) return DATE;
 

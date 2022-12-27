@@ -82,7 +82,6 @@ public class SoqulImpl implements Soqul {
             log.warn("Class %s is not scanned, scan now..", clazz.getName());
             scanClass(clazz);
         }
-        log.info("try create table..");
         try {
             String sql = scannedClasses.get(clazz.getName()).getCreateQuery(tableName);
             log.info(" SQL: %s", sql);

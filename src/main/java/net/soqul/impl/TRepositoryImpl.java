@@ -132,7 +132,7 @@ public class TRepositoryImpl<T> implements TRepository<T> {
                     java.lang.reflect.Field field1 = t.getClass().getDeclaredField(field.getName());
                     field1.setAccessible(true);
                     Object value = rs.getObject(field.getInitateColumn().name());
-                    field1.set(t, field.getType() == ColumnType.JSON ? JsonUtil.from(value.toString(), field1.getClass()) : value);
+                    field1.set(t, field.getType() == ColumnType.JSON ? JsonUtil.from(value.toString(), field1.getType()) : value);
                 }
                 return null;
             });
