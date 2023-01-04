@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SoqulImpl implements Soqul {
 
+    private boolean debug = false;
     private final Log log = new Log("Soqul");
     private final Map<String, SoqulDto> scannedClasses = new LinkedHashMap<>();
 
@@ -77,6 +78,11 @@ public class SoqulImpl implements Soqul {
     }
 
     @Override
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    @Override
     public <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull String tableName, @NonNull Connection connection, ResponseCache<T> cache) {
         if (!scannedClasses.containsKey(clazz.getName())) {
             log.warn("Class %s is not scanned, scan now..", clazz.getName());
@@ -89,6 +95,6 @@ public class SoqulImpl implements Soqul {
         } catch (Exception exception) {
             log.warn("The table could not be created.");
         }
-        return new TRepositoryImpl<>(tableName, Executor.getExecutor(connection), cache, scannedClasses.get(clazz.getName()));
+        return new TRepositoryImpl<>(tableName, Executor.getExecutor(connection, debug), cache, scannedClasses.get(clazz.getName()));
     }
 }

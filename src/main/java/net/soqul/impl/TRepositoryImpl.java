@@ -87,6 +87,14 @@ public class TRepositoryImpl<T> implements TRepository<T> {
     }
 
     @Override
+    public void removeByPrimary(@NonNull Object object) {
+        InitateColumn primaryInitateColumn = dto.getKeyField().getInitateColumn();
+        String request = String.format("DELETE * FROM `" + table + "` WHERE `" + primaryInitateColumn.name() + "` = '" + (dto.getKeyField().getType() == ColumnType.JSON ? JsonUtil.to(object) : object.toString()) + "' LIMIT 1");
+
+        executor.execute(false, request);
+    }
+
+    @Override
     public T getByPrimary(@NonNull Object object) {
         InitateColumn primaryInitateColumn = dto.getKeyField().getInitateColumn();
         String request = String.format("SELECT * FROM `" + table + "` WHERE `" + primaryInitateColumn.name() + "` = '" + (dto.getKeyField().getType() == ColumnType.JSON ? JsonUtil.to(object) : object.toString()) + "' LIMIT 1");

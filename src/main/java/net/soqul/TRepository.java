@@ -10,6 +10,8 @@ public interface TRepository<T> {
 
     void save(@NonNull T t);
 
+    void removeByPrimary(@NonNull T t);
+
     T getByPrimary(@NonNull Object object);
 
     Collection<T> getAll();
