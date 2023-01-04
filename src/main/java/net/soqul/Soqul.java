@@ -17,6 +17,7 @@ public interface Soqul {
         return createRepository(clazz, tableName, connection, null);
     }
 
+    void setDebug(boolean debug);
 
     <T> TRepository<T> createRepository(@NonNull Class<T> clazz, @NonNull String tableName, @NonNull Connection connection, ResponseCache<T> cache);
 }

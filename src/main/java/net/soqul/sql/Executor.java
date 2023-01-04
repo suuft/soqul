@@ -1,5 +1,6 @@
 package net.soqul.sql;
 
+import lombok.RequiredArgsConstructor;
 import net.soqul.log.Log;
 
 import java.sql.Connection;
@@ -8,18 +9,16 @@ import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
+@RequiredArgsConstructor
 public class Executor {
 
     private static final Log log = new Log("SqlManager");
-
+    private final boolean debug;
     private final Connection connection;
 
-    private Executor(final Connection connection) {
-        this.connection = connection;
-    }
 
-    public static Executor getExecutor(Connection connection) {
-        return new Executor(connection);
+    public static Executor getExecutor(Connection connection, boolean debug) {
+        return new Executor(debug, connection);
     }
 
     /**

@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.clojars.suuft:soqul:1.0.2'
+    implementation 'net.clojars.suuft:soqul:1.0.3'
 }
 ```
 
@@ -43,7 +43,7 @@ Depend:
 <dependency>
     <groupId>net.clojars.suuft</groupId>
     <artifactId>soqul</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -81,12 +81,12 @@ public class User {
 
 Wonderful, now we need to place annotations over each variable that we want to store in the database:
 
-| Annotation    | Description                                                                                       |
-|---------------|---------------------------------------------------------------------------------------------------|
-| @Field        | Must be above each field. <br/>Specifies the type to store and the name of the column.                 |
-| @PrimaryKey   | Should ONLY be above the main field. <br/>Indicates the ID field by which the object can be retrieved. |
-| @NotNull      | You need to put over each field the value of which != null.                                                     |
-| @DefaultValue | Sets the default value for the variable.                                                     |
+| Annotation        | Description                                                                                       |
+|-------------------|---------------------------------------------------------------------------------------------------|
+| @InitateColumn    | Must be above each field. <br/>Specifies the type to store and the name of the column.                 |
+| @RetentionPrimary | Should ONLY be above the main field. <br/>Indicates the ID field by which the object can be retrieved. |
+| @RetentionFilled  | You need to put over each field the value of which != null.                                                     |
+| @RetentionDefault | Sets the default value for the variable.                                                     |
 
 As a result, we get something like:
 
