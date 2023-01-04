@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.clojars.suuft:soqul:1.0.3'
+    implementation 'net.clojars.suuft:soqul:1.0.4'
 }
 ```
 
@@ -43,7 +43,7 @@ Depend:
 <dependency>
     <groupId>net.clojars.suuft</groupId>
     <artifactId>soqul</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 

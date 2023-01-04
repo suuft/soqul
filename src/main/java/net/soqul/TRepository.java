@@ -10,7 +10,7 @@ public interface TRepository<T> {
 
     void save(@NonNull T t);
 
-    void removeByPrimary(@NonNull T t);
+    void removeByPrimary(@NonNull Object object);
 
     T getByPrimary(@NonNull Object object);
 
